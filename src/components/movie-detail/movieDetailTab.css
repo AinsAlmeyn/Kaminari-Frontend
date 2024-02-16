@@ -1,0 +1,59 @@
+.detail-container {
+    margin: 15px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .detail-header {
+    margin-bottom: 20px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #009688;
+  }
+  
+  .detail-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #e6e6e6;
+  }
+  
+  .detail-content {
+    padding: 10px 0;
+  }
+  
+  .detail-section {
+    margin-bottom: 15px;
+  }
+  
+  .detail-label {
+    font-weight: bold;
+    margin-right: 10px;
+    min-width: 80px;
+    display: inline-block;
+    vertical-align: top;
+  }
+  
+  .detail-value {
+    display: inline-block;
+    max-width: 650px;
+    /* Or any maximum width you prefer */
+    vertical-align: top;
+    text-align: left;
+    /* Ensures text is aligned to the left */
+  }
+  
+  .detail-synopsis,
+  .detail-background {
+    white-space: pre-line;
+    /* Preserves line breaks as in the original text */
+  }
+  
+  /* Links will have the FF5722 color */
+  a {
+    color: #009688;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }

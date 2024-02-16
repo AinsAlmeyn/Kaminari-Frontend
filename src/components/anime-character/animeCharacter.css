@@ -1,0 +1,29 @@
+.detail-container {
+  margin: 15px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.detail-header {
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-bottom: 2px solid #FF5722;
+}
+
+.detail-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Links will have the FF5722 color */
+a {
+  color: #FF5722;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+

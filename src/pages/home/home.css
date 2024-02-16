@@ -1,0 +1,67 @@
+/* Pagination container style */
+.pagination {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+  justify-content: center;
+  /* Orta hizalama */
+}
+
+/* Single page number style */
+.pagination li {
+  margin: 0 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  /* Yuvarlak köşeler */
+}
+
+/* Page number links style */
+.pagination li a {
+  display: block;
+  padding: 8px 16px;
+  text-decoration: none;
+  /* Link altı çizgisini kaldır */
+  color: #ffffff;
+  /* Yazı rengi */
+}
+
+/* Active page style */
+.pagination li.active {
+  background-color: #009688;
+  /* Aktif sayfa arka plan rengi */
+  color: white;
+  /* Aktif sayfa yazı rengi */
+  border-color: #009688;
+  /* Aktif sayfa border rengi */
+}
+
+.pagination li.active a {
+  color: white;
+  /* Aktif sayfa link rengi */
+}
+
+/* Hover effects */
+.pagination li:not(.active) a:hover {
+  background-color: #009688;
+  /* Hover arka plan rengi */
+}
+
+/* Previous & Next button style */
+.pagination li.previous,
+.pagination li.next {
+  background-color: #363640;
+  /* Önceki ve Sonraki arka plan rengi */
+}
+
+.pagination li.previous a,
+.pagination li.next a {
+  font-weight: bold;
+  /* Önceki ve Sonraki yazı kalınlığı */
+}
+
+/* Break label style (for '...') */
+.pagination li.break a {
+  cursor: default;
+  /* Kursoru varsayılan yap */
+}
