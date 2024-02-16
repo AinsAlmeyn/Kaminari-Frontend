@@ -1,0 +1,12 @@
+Copyright (c) 2024 Yıldıray Koçak
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, subject to the following conditions:
+
+1. The Software may not be used for commercial purposes in any form.
+2. Redistribution of the Software is not allowed unless expressly permitted by the author.
+3. The use of the Software, even for personal and educational purposes, requires explicit permission from the author.
+4. Any derivative works or modifications of the Software must be clearly marked as such and must not mislead others into believing that the original Software is being used.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+For permission requests or inquiries, please contact kocakakay@gmail.com.
