@@ -42,6 +42,17 @@ const AnimeDetails = ({ data }) => {
   );
 };
 
+const AnimeMobileDetails = ({ data }) => {
+  return (
+    <TabPanel>
+      <Item icon='fa-solid fa-list-check' title="Anime Detail" component={() => <AnimeDetailTab data={data} />} />
+      <Item icon='fa-solid fa-align-left' title="Synopsis & Background" component={() => <AnimeSynopsisBackground data={data} />} />
+      <Item icon='fa-solid fa-play' title="Trailer" component={() => <AnimeTrailer data={data} />} />
+    </TabPanel>
+  );
+};
+
+
 
 const scoreOptions = [
   { id: '0', name: 'No Score', icon: 'far fa-circle' },
@@ -83,6 +94,8 @@ export default function Home() {
     fontWeight: 'bold',
   };
 
+  //! IS MOBILE
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   //! ANIME SEARCH TEXTBOX VALUE
   const [animeSearchTextboxValue, setAnimeSearchTextboxValue] = useState('');
@@ -136,6 +149,17 @@ export default function Home() {
       fetchSeasons();
     }
   }, [isFilterPanelVisible]);
+
+
+  //! IS MOBILE
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   //! FETCH ANIME SEARCH REQUEST
   function fetchAnimeSearch(page = 1) {
@@ -238,6 +262,10 @@ export default function Home() {
     return <AnimeDetails data={row.data.data} />;
   };
 
+  const renderMobileDetailGrid = (row) => {
+    return <AnimeMobileDetails data={row.data.data} />;
+  };
+
   //! ON GRID INITIALIZED
   const onGridInitialized = (e) => {
     e.component.columnOption('aired.from', 'visibleIndex', -1);
@@ -283,86 +311,574 @@ export default function Home() {
     });
   }
 
+  //! MOBIL DATAGRID RENDER
+  const mobileCellRender = (data) => {
+    let iconClass;
+    let statusElement = null;
+    let scoreElement = null;
+
+    if (data.data.my_status) {
+      switch (data.data.my_status) {
+        case 'Completed':
+          iconClass = 'fa fa-check-circle';
+          break;
+        case 'Watching':
+          iconClass = 'fa fa-eye';
+          break;
+        case 'Plan to Watch':
+          iconClass = 'fa fa-clock';
+          break;
+        case 'Dropped':
+          iconClass = 'fa fa-times-circle';
+          break;
+        case 'On-Hold':
+          iconClass = 'fa fa-pause-circle';
+          break;
+        default:
+          iconClass = 'fa fa-question-circle';
+      }
+      statusElement = (
+        <div key="status" style={{
+          display: 'flex', alignItems: 'center', padding: '6px 12px',
+          backgroundColor: 'rgba(0, 150, 136, 0.2)', borderRadius: '15px',
+          marginRight: '8px', color: '#009688', fontSize: '16px'
+        }}>
+          <i className={iconClass} style={{ fontSize: '20px', marginRight: '4px' }}></i>
+          {data.data.my_status}
+        </div>
+      );
+    }
+
+    if (data.data.my_score || data.data.my_score === 0) {
+      scoreElement = (
+        <div key="score" style={{
+          padding: '6px 12px', backgroundColor: 'rgba(0, 150, 136, 0.2)',
+          borderRadius: '15px', fontSize: '16px', color: '#009688'
+        }}>
+          {data.data.my_score}
+        </div>
+      );
+    }
+
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', padding: '5px', gap: '10px' }}>
+        <img src={data.data.images.jpg.large_image_url} alt="Anime" style={{ width: '80px', height: '110px', objectFit: 'cover' }} />
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+          <span style={{ fontWeight: 'bold' }}>{data.data.title}</span>
+          <span>Type: {data.data.type}</span>
+          <span>Episodes: {data.data.episodes}</span>
+          <span>Score: {data.data.score}</span>
+          <span>Members: {data.data.members.toLocaleString()}</span>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            {statusElement}
+            {scoreElement}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+
+  // const mobileCellRender = (data) => {
+  //   let statusElement = null;
+  //   let scoreElement = null;
+
+  //   if (data.data.my_status) {
+  //     let statusIconClass;
+  //     let statusIconColor;
+  //     switch (data.data.my_status) {
+  //       case 'Completed':
+  //         statusIconClass = 'fa fa-check-circle';
+  //         statusIconColor = 'green';
+  //         break;
+  //       case 'Watching':
+  //         statusIconClass = 'fa fa-eye';
+  //         statusIconColor = 'blue';
+  //         break;
+  //       case 'Plan to Watch':
+  //         statusIconClass = 'fa fa-clock';
+  //         statusIconColor = 'orange';
+  //         break;
+  //       case 'Dropped':
+  //         statusIconClass = 'fa fa-times-circle';
+  //         statusIconColor = 'red';
+  //         break;
+  //       case 'On-Hold':
+  //         statusIconClass = 'fa fa-pause-circle';
+  //         statusIconColor = 'purple';
+  //         break;
+  //       default:
+  //         statusIconClass = 'fa fa-question-circle';
+  //         statusIconColor = 'grey';
+  //     }
+  //     statusElement = (
+  //       <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+  //         <i className={statusIconClass} style={{ color: statusIconColor }}></i>
+  //         <span>{data.data.my_status}</span>
+  //       </div>
+  //     );
+  //   }
+
+  //   if (data.data.my_score || data.data.my_score === 0) {
+  //     scoreElement = <span style={{ marginLeft: 'auto' }}>{data.data.my_score}</span>;
+  //   }
+
+  //   return (
+  //     <div style={{ display: 'flex', alignItems: 'center', padding: '10px', gap: '10px' }}>
+  //       <img 
+  //         src={data.data.images.jpg.large_image_url} 
+  //         alt="Anime" 
+  //         style={{ width: '80px', height: '110px', objectFit: 'cover' }} 
+  //       />
+  //       <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', flex: 1 }}>
+  //         <strong>{data.data.title}</strong>
+  //         <span>Type: {data.data.type}</span>
+  //         <span>Episodes: {data.data.episodes}</span>
+  //         <span>Score: {data.data.score}</span>
+  //         <span>Members: {data.data.members}</span>
+  //         {statusElement && <div style={{ display: 'flex', marginTop: 'auto', gap: '5px' }}>
+  //           {statusElement}
+  //           {scoreElement}
+  //         </div>}
+  //       </div>
+  //     </div>
+  //   );
+  // };
+
+
+  const mobileDataGrid = () => {
+    return (<DataGrid
+      dataSource={searchedAnimeDataSource}
+      keyExpr="mal_id"
+      columnAutoWidth={true}
+      wordWrapEnabled={true}
+      hoverStateEnabled={true}
+      cellHintEnabled={true}
+      showBorders={true}
+      height={gridHeight - 260}
+      scrolling={{
+        mode: "virtual",
+        showScrollbar: "always",
+        columnRenderingMode: "standard"
+      }}
+      showColumnHeaders={true}
+      showColumnLines={true}
+      showRowLines={true}
+      onRowUpdating={onRowUpdating}
+    >
+      <MasterDetail
+        enabled={true}
+        component={renderMobileDetailGrid}
+      />
+      <Editing
+        mode="popup"
+        allowUpdating={true}
+      >
+        <Popup title="Anime Update" showTitle={true} width={'25%'} height={'20%'} />
+        <Form>
+          <Item itemType="group" colCount={2} colSpan={2}>
+            <Item
+              dataField="my_status"
+              editorType="dxSelectBox"
+              editorOptions={{
+                items: animeStatuses,
+                valueExpr: "id",
+                displayExpr: "name",
+                value: ''
+              }}
+              label={{ text: "Select Status", showColonAfterLabel: true }}
+            />
+            <Item
+              dataField="my_score"
+              editorType="dxSelectBox"
+              editorOptions={{
+                items: scoreOptions,
+                valueExpr: "id",
+                displayExpr: "name",
+                value: ''
+              }}
+              label={{ text: "Select Score", showColonAfterLabel: true }}
+            />
+          </Item>
+        </Form>
+      </Editing>
+      <Column caption='Details' cellRender={mobileCellRender} />
+      <Column
+        dataField="my_score"
+        visible={false}
+      />
+      <Column
+        dataField="my_status"
+        visible={false}
+      />
+    </DataGrid>)
+  }
+
+  const dekstopDataGrid = () => {
+    return (<DataGrid
+      dataSource={searchedAnimeDataSource}
+      keyExpr="mal_id"
+      allowColumnReordering={true}
+      allowColumnResizing={true}
+      columnAutoWidth={true}
+      wordWrapEnabled={true}
+      hoverStateEnabled={true}
+      cellHintEnabled={true}
+      showBorders={true}
+      height={gridHeight - 260}
+      scrolling={{
+        mode: "virtual",
+        showScrollbar: "always",
+        columnRenderingMode: "standard"
+      }}
+      showColumnHeaders={true}
+      showColumnLines={true}
+      showRowLines={true}
+      searchPanel={{
+        visible: true,
+        placeholder: "Search...",
+        highlightSearchText: true,
+        width: 240,
+        highlightCaseSensitive: true,
+        searchVisibleColumnsOnly: false,
+      }}
+      onInitialized={onGridInitialized}
+      onRowUpdating={onRowUpdating}
+      onEditingStart={(e) => {
+        e.component.columnOption("my_status", "editorOptions", {
+          defaultValue: e.data.my_status,
+        });
+        e.component.columnOption("my_score", "editorOptions", {
+          defaultValue: e.data.my_score,
+        });
+      }}
+
+    >
+      <FilterRow visible={true} />
+      <HeaderFilter visible={true} />
+      <GroupPanel visible={true} />
+      <ColumnChooser enabled={true} />
+      <MasterDetail
+        enabled={true}
+        component={renderDetailGrid}
+      />
+      <Editing
+        mode="popup"
+        allowUpdating={true}
+      >
+        <Popup title="Anime Update" showTitle={true} width={'25%'} height={'20%'} />
+        <Form>
+          <Item itemType="group" colCount={2} colSpan={2}>
+            <Item
+              dataField="my_status"
+              editorType="dxSelectBox"
+              editorOptions={{
+                items: animeStatuses,
+                valueExpr: "id",
+                displayExpr: "name",
+                value: ''
+              }}
+              label={{ text: "Select Status", showColonAfterLabel: true }}
+            />
+            <Item
+              dataField="my_score"
+              editorType="dxSelectBox"
+              editorOptions={{
+                items: scoreOptions,
+                valueExpr: "id",
+                displayExpr: "name",
+                value: ''
+              }}
+              label={{ text: "Select Score", showColonAfterLabel: true }}
+            />
+          </Item>
+        </Form>
+      </Editing>
+      <Column
+        dataField="images.jpg.large_image_url"
+        caption="Image"
+        cellRender={(data) => {
+          return (
+            <img
+              src={data.value}
+              alt="Anime Resmi"
+              style={{ cursor: 'pointer', width: 100, height: 140 }} // İmlecin tıklandığında olduğunu belirtir
+              onClick={() => window.open(data.value, '_blank')} // Resme tıklandığında yeni sekmede açılacak
+            />
+          );
+        }}
+      />
+      <Column
+        dataField="title"
+        visible={true}
+        caption='Title'
+        cellRender={(data) => {
+          let iconClass;
+          let statusElement = null;
+          let scoreElement = null;
+
+          if (data.data.my_status) {
+            switch (data.data.my_status) {
+              case 'Completed':
+                iconClass = 'fa fa-check-circle';
+                break;
+              case 'Watching':
+                iconClass = 'fa fa-eye';
+                break;
+              case 'Plan to Watch':
+                iconClass = 'fa fa-clock';
+                break;
+              case 'Dropped':
+                iconClass = 'fa fa-times-circle';
+                break;
+              case 'On-Hold':
+                iconClass = 'fa fa-pause-circle';
+                break;
+              default:
+                iconClass = 'fa fa-question-circle';
+            }
+            statusElement = (
+              <div key="status" style={{ display: 'flex', alignItems: 'center', padding: '6px 12px', backgroundColor: 'rgba(0, 150, 136, 0.2)', borderRadius: '15px', marginRight: '8px', color: '#009688', fontSize: '16px' }}>
+                <i className={iconClass} style={{ fontSize: '20px', marginRight: '4px' }}></i>
+                {data.data.my_status}
+              </div>
+            );
+          }
+
+          if (data.data.my_score || data.data.my_score === 0) {
+            scoreElement = (
+              <div key="score" style={{ padding: '6px 12px', backgroundColor: 'rgba(0, 150, 136, 0.2)', borderRadius: '15px', fontSize: '16px', color: '#009688' }}>
+                {data.data.my_score}
+              </div>
+            );
+          }
+
+          return (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontWeight: 'bold', fontSize: '18px' }}>
+              <span style={{ marginRight: 'auto' }}>{data.data.title}</span>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                {statusElement}
+                {scoreElement}
+              </div>
+              <Button
+                onClick={() => window.open(data.data.url, '_blank', 'noopener,noreferrer')}
+                icon='info'
+                style={{
+                  marginLeft: '3px',
+                }}
+              />
+            </div>
+          );
+        }}
+      />
+      <Column
+        dataField="type"
+        visible={true}
+        caption='Type'
+        headerCellRender={(headerData) => <div style={{ fontWeight: 'bold', fontSize: '16px' }}>{headerData.column.caption}</div>}
+        cellRender={(data) => <div style={{ fontWeight: 'bold', fontSize: '16px' }}>{data.value}</div>}
+      />
+      <Column
+        dataField="episodes"
+        visible={true}
+        caption='Episodes'
+        headerCellRender={(headerData) => <div style={{ fontWeight: 'bold', fontSize: '16px' }}>{headerData.column.caption}</div>}
+        cellRender={(data) => <div style={{ fontWeight: 'bold', fontSize: '16px' }}>{data.value}</div>}
+      />
+      <Column
+        dataField="score"
+        visible={true}
+        caption='Score'
+        headerCellRender={(headerData) => <div style={{ fontWeight: 'bold', fontSize: '16px' }}>{headerData.column.caption}</div>}
+        cellRender={(data) => {
+          const formattedValue = new Intl.NumberFormat().format(data.value);
+          return (
+            <div style={{ fontWeight: 'bold', fontSize: '16px' }}>{formattedValue}</div>
+          );
+        }}
+      />
+      <Column
+        dataField="my_score"
+        visible={false}
+      />
+      <Column
+        dataField="my_status"
+        visible={false}
+      />
+      <Column
+        dataField="members"
+        visible={true}
+        caption='Members'
+        headerCellRender={(headerData) => <div style={{ fontWeight: 'bold', fontSize: '16px' }}>{headerData.column.caption}</div>}
+        cellRender={(data) => {
+          const formattedValue = new Intl.NumberFormat().format(data.value);
+          return (
+            <div style={{ fontWeight: 'bold', fontSize: '16px' }}>{formattedValue}</div>
+          );
+        }}
+      />
+      <Column
+        dataField="aired.from"
+        visible={false}
+        caption='Start Date'
+        dataType="date"
+        customizeText={({ value }) => formatDate(value)}
+        headerCellRender={(headerData) => <div style={{ fontWeight: 'bold', fontSize: '16px' }}>{headerData.column.caption}</div>}
+        cellRender={(data) => <div style={{ fontWeight: 'bold', fontSize: '16px' }}>{formatDate(data.value)}</div>}
+      />
+      <Column
+        dataField="aired.to"
+        visible={false}
+        caption='End Date'
+        dataType="date"
+        customizeText={({ value }) => formatDate(value)}
+        headerCellRender={(headerData) => <div style={{ fontWeight: 'bold', fontSize: '16px' }}>{headerData.column.caption}</div>}
+        cellRender={(data) => <div style={{ fontWeight: 'bold', fontSize: '16px' }}>{formatDate(data.value)}</div>}
+      />
+    </DataGrid>)
+  }
+
+  const dekstopFilterPanel = () => {
+    return (
+      <div>
+        <Row>
+          <Col xs="3">
+            <TextBox
+              value={animeSearchTextboxValue}
+              onValueChanged={(e) => setAnimeSearchTextboxValue(e.value)}
+              onEnterKey={(e) => {
+                fetchAnimeSearch();
+              }}
+              label='Search Anime Title...'
+              labelMode='floating'
+              showClearButton={true}
+            />
+
+          </Col>
+          <Col xs="3">
+            <SelectBox
+              items={animeTypes}
+              value={animeTypeSelectboxValue}
+              onValueChanged={(e) => setAnimeTypeSelectboxValue(e.value)}
+              labelMode='floating'
+              label='Select Anime Type...'
+              showClearButton={true}
+            />
+          </Col>
+          <Col xs="3">
+            <SelectBox
+              items={airingTypes}
+              value={airingTypeSelectboxValue}
+              onValueChanged={(e) => setAiringTypeSelectboxValue(e.value)}
+              labelMode='floating'
+              label='Select Airing Type...'
+              showClearButton={true}
+            />
+          </Col>
+          <Col xs="3">
+            <RangeSlider
+              min={0}
+              max={10}
+              start={0}
+              end={10}
+              step={1}
+              label={{
+                visible: false,
+                format: 'decimal'
+              }}
+              value={rangeValues}
+              onValueChanged={handleRangeChange}
+            />
+            <div style={{ paddingLeft: '5%' }}>
+              Score Range {rangeValues[0]} - {rangeValues[1]}
+            </div>
+          </Col>
+        </Row>
+        <br />
+        <Row>
+          <Col xs="6">
+            <Button text="Search Anime" stylingMode='contained' hoverStateEnabled={true} style={{
+              backgroundColor: '#009688',
+              color: 'white',
+            }} width={"100%"} height={"100%"}
+              onClick={() => {
+                setIsSearchActive(true);
+                fetchAnimeSearch();
+              }}
+            />
+          </Col>
+          <Col xs="6">
+            <Button text={isFilterPanelVisible ? "Season Filter Panel" : "Detailed Filter Panel"} stylingMode='contained' hoverStateEnabled={true} style={{
+              backgroundColor: '#009688',
+              color: 'white',
+            }} width={"100%"} height={"100%"}
+              onClick={toggleFilterPanel}
+            />
+          </Col>
+        </Row>
+      </div>)
+  }
+
+  const mobileFilterPanel = () => {
+    return (
+      <div>
+        <Row>
+          <Col xs="6">
+            <TextBox
+              value={animeSearchTextboxValue}
+              onValueChanged={(e) => setAnimeSearchTextboxValue(e.value)}
+              onEnterKey={(e) => {
+                fetchAnimeSearch();
+              }}
+              label='Search Anime Title...'
+              labelMode='floating'
+              showClearButton={true}
+            />
+
+          </Col>
+          <Col xs="6">
+            <SelectBox
+              items={animeTypes}
+              value={animeTypeSelectboxValue}
+              onValueChanged={(e) => setAnimeTypeSelectboxValue(e.value)}
+              labelMode='floating'
+              label='Select Anime Type...'
+              showClearButton={true}
+            />
+          </Col>
+        </Row>
+        <br />
+        <Row>
+          <Col xs="6">
+            <Button text="Search Anime" stylingMode='contained' hoverStateEnabled={true} style={{
+              backgroundColor: '#009688',
+              color: 'white',
+            }} width={"100%"} height={"100%"}
+              onClick={() => {
+                setIsSearchActive(true);
+                fetchAnimeSearch();
+              }}
+            />
+          </Col>
+          <Col xs="6">
+            <Button text={isFilterPanelVisible ? "Season Filter Panel" : "Detailed Filter Panel"} stylingMode='contained' hoverStateEnabled={true} style={{
+              backgroundColor: '#009688',
+              color: 'white',
+            }} width={"100%"} height={"100%"}
+              onClick={toggleFilterPanel}
+            />
+          </Col>
+        </Row>
+      </div>)
+  }
 
   return (
     <div>
       {isFilterPanelVisible && (
         <>
-          <Row>
-            <Col xs="3">
-              <TextBox
-                value={animeSearchTextboxValue}
-                onValueChanged={(e) => setAnimeSearchTextboxValue(e.value)}
-                onEnterKey={(e) => {
-                  fetchAnimeSearch();
-                }}
-                label='Search Anime Title...'
-                labelMode='floating'
-                showClearButton={true}
-              />
-
-            </Col>
-            <Col xs="3">
-              <SelectBox
-                items={animeTypes}
-                value={animeTypeSelectboxValue}
-                onValueChanged={(e) => setAnimeTypeSelectboxValue(e.value)}
-                labelMode='floating'
-                label='Select Anime Type...'
-                showClearButton={true}
-              />
-            </Col>
-            <Col xs="3">
-              <SelectBox
-                items={airingTypes}
-                value={airingTypeSelectboxValue}
-                onValueChanged={(e) => setAiringTypeSelectboxValue(e.value)}
-                labelMode='floating'
-                label='Select Airing Type...'
-                showClearButton={true}
-              />
-            </Col>
-            <Col xs="3">
-              <RangeSlider
-                min={0}
-                max={10}
-                start={0}
-                end={10}
-                step={1}
-                label={{
-                  visible: false,
-                  format: 'decimal'
-                }}
-                value={rangeValues}
-                onValueChanged={handleRangeChange}
-              />
-              <div style={{ paddingLeft: '5%' }}>
-                Score Range {rangeValues[0]} - {rangeValues[1]}
-              </div>
-            </Col>
-          </Row>
-          <br />
-          <Row>
-            <Col xs="6">
-              <Button text="Search Anime" stylingMode='contained' hoverStateEnabled={true} style={{
-                backgroundColor: '#009688',
-                color: 'white',
-              }} width={"100%"} height={"100%"}
-                onClick={() => {
-                  setIsSearchActive(true);
-                  fetchAnimeSearch();
-                }}
-              />
-            </Col>
-            <Col xs="6">
-              <Button text={isFilterPanelVisible ? "Season Filter Panel" : "Detailed Filter Panel"} stylingMode='contained' hoverStateEnabled={true} style={{
-                backgroundColor: '#009688',
-                color: 'white',
-              }} width={"100%"} height={"100%"}
-                onClick={toggleFilterPanel}
-              />
-            </Col>
-          </Row>
+          {
+            isMobile ? (mobileFilterPanel()) : (dekstopFilterPanel())
+          }
         </>
       )}
       {!isFilterPanelVisible && (
@@ -414,228 +930,7 @@ export default function Home() {
       )}
       <br />
       <Row>
-        <DataGrid
-          dataSource={searchedAnimeDataSource}
-          keyExpr="mal_id"
-          allowColumnReordering={true}
-          allowColumnResizing={true}
-          columnAutoWidth={true}
-          wordWrapEnabled={true}
-          hoverStateEnabled={true}
-          cellHintEnabled={true}
-          showBorders={true}
-          height={gridHeight - 260}
-          scrolling={{
-            mode: "virtual",
-            showScrollbar: "always",
-            columnRenderingMode: "standard"
-          }}
-          showColumnHeaders={true}
-          showColumnLines={true}
-          showRowLines={true}
-          searchPanel={{
-            visible: true,
-            placeholder: "Search...",
-            highlightSearchText : true,
-            width: 240,
-            highlightCaseSensitive: true,
-            searchVisibleColumnsOnly: false,
-          }}
-          onInitialized={onGridInitialized}
-          onRowUpdating={onRowUpdating}
-          onEditingStart={(e) => {
-            e.component.columnOption("my_status", "editorOptions", {
-              defaultValue: e.data.my_status,
-            });
-            e.component.columnOption("my_score", "editorOptions", {
-              defaultValue: e.data.my_score,
-            });
-          }}
-
-        >
-          <FilterRow visible={true} />
-          <HeaderFilter visible={true} />
-          <GroupPanel visible={true} />
-          <ColumnChooser enabled={true} />
-          <MasterDetail
-            enabled={true}
-            component={renderDetailGrid}
-          />
-          <Editing
-            mode="popup"
-            allowUpdating={true}
-          >
-            <Popup title="Anime Update" showTitle={true} width={'25%'} height={'20%'} />
-            <Form>
-              <Item itemType="group" colCount={2} colSpan={2}>
-                <Item
-                  dataField="my_status"
-                  editorType="dxSelectBox"
-                  editorOptions={{
-                    items: animeStatuses,
-                    valueExpr: "id",
-                    displayExpr: "name",
-                    value: ''
-                  }}
-                  label={{ text: "Select Status", showColonAfterLabel: true }}
-                />
-                <Item
-                  dataField="my_score"
-                  editorType="dxSelectBox"
-                  editorOptions={{
-                    items: scoreOptions,
-                    valueExpr: "id",
-                    displayExpr: "name",
-                    value: ''
-                  }}
-                  label={{ text: "Select Score", showColonAfterLabel: true }}
-                />
-              </Item>
-            </Form>
-          </Editing>
-          <Column
-            dataField="images.jpg.large_image_url"
-            caption="Image"
-            cellRender={(data) => {
-              return (
-                <img
-                  src={data.value}
-                  alt="Anime Resmi"
-                  style={{ cursor: 'pointer', width: 100, height: 140 }} // İmlecin tıklandığında olduğunu belirtir
-                  onClick={() => window.open(data.value, '_blank')} // Resme tıklandığında yeni sekmede açılacak
-                />
-              );
-            }}
-          />
-          <Column
-            dataField="title"
-            visible={true}
-            caption='Title'
-            cellRender={(data) => {
-              let iconClass;
-              let statusElement = null;
-              let scoreElement = null;
-
-              if (data.data.my_status) {
-                switch (data.data.my_status) {
-                  case 'Completed':
-                    iconClass = 'fa fa-check-circle';
-                    break;
-                  case 'Watching':
-                    iconClass = 'fa fa-eye';
-                    break;
-                  case 'Plan to Watch':
-                    iconClass = 'fa fa-clock';
-                    break;
-                  case 'Dropped':
-                    iconClass = 'fa fa-times-circle';
-                    break;
-                  case 'On-Hold':
-                    iconClass = 'fa fa-pause-circle';
-                    break;
-                  default:
-                    iconClass = 'fa fa-question-circle';
-                }
-                statusElement = (
-                  <div key="status" style={{ display: 'flex', alignItems: 'center', padding: '6px 12px', backgroundColor: 'rgba(0, 150, 136, 0.2)', borderRadius: '15px', marginRight: '8px', color: '#009688', fontSize: '16px' }}>
-                    <i className={iconClass} style={{ fontSize: '20px', marginRight: '4px' }}></i>
-                    {data.data.my_status}
-                  </div>
-                );
-              }
-
-              if (data.data.my_score || data.data.my_score === 0) {
-                scoreElement = (
-                  <div key="score" style={{ padding: '6px 12px', backgroundColor: 'rgba(0, 150, 136, 0.2)', borderRadius: '15px', fontSize: '16px', color: '#009688' }}>
-                    {data.data.my_score}
-                  </div>
-                );
-              }
-
-              return (
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontWeight: 'bold', fontSize: '18px' }}>
-                  <span style={{ marginRight: 'auto' }}>{data.data.title}</span>
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    {statusElement}
-                    {scoreElement}
-                  </div>
-                  <Button
-                    onClick={() => window.open(data.data.url, '_blank', 'noopener,noreferrer')}
-                    icon='info'
-                    style={{
-                      marginLeft: '3px',
-                    }}
-                  />
-                </div>
-              );
-            }}
-          />
-          <Column
-            dataField="type"
-            visible={true}
-            caption='Type'
-            headerCellRender={(headerData) => <div style={{ fontWeight: 'bold', fontSize: '16px' }}>{headerData.column.caption}</div>}
-            cellRender={(data) => <div style={{ fontWeight: 'bold', fontSize: '16px' }}>{data.value}</div>}
-          />
-          <Column
-            dataField="episodes"
-            visible={true}
-            caption='Episodes'
-            headerCellRender={(headerData) => <div style={{ fontWeight: 'bold', fontSize: '16px' }}>{headerData.column.caption}</div>}
-            cellRender={(data) => <div style={{ fontWeight: 'bold', fontSize: '16px' }}>{data.value}</div>}
-          />
-          <Column
-            dataField="score"
-            visible={true}
-            caption='Score'
-            headerCellRender={(headerData) => <div style={{ fontWeight: 'bold', fontSize: '16px' }}>{headerData.column.caption}</div>}
-            cellRender={(data) => {
-              const formattedValue = new Intl.NumberFormat().format(data.value);
-              return (
-                <div style={{ fontWeight: 'bold', fontSize: '16px' }}>{formattedValue}</div>
-              );
-            }}
-          />
-          <Column
-            dataField="my_score"
-            visible={false}
-          />
-          <Column
-            dataField="my_status"
-            visible={false}
-          />
-          <Column
-            dataField="members"
-            visible={true}
-            caption='Members'
-            headerCellRender={(headerData) => <div style={{ fontWeight: 'bold', fontSize: '16px' }}>{headerData.column.caption}</div>}
-            cellRender={(data) => {
-              const formattedValue = new Intl.NumberFormat().format(data.value);
-              return (
-                <div style={{ fontWeight: 'bold', fontSize: '16px' }}>{formattedValue}</div>
-              );
-            }}
-          />
-          <Column
-            dataField="aired.from"
-            visible={false}
-            caption='Start Date'
-            dataType="date"
-            customizeText={({ value }) => formatDate(value)}
-            headerCellRender={(headerData) => <div style={{ fontWeight: 'bold', fontSize: '16px' }}>{headerData.column.caption}</div>}
-            cellRender={(data) => <div style={{ fontWeight: 'bold', fontSize: '16px' }}>{formatDate(data.value)}</div>}
-          />
-          <Column
-            dataField="aired.to"
-            visible={false}
-            caption='End Date'
-            dataType="date"
-            customizeText={({ value }) => formatDate(value)}
-            headerCellRender={(headerData) => <div style={{ fontWeight: 'bold', fontSize: '16px' }}>{headerData.column.caption}</div>}
-            cellRender={(data) => <div style={{ fontWeight: 'bold', fontSize: '16px' }}>{formatDate(data.value)}</div>}
-          />
-
-        </DataGrid>
+        {isMobile ? mobileDataGrid() : dekstopDataGrid()}
       </Row>
       <Row>
         <Col xs="12">

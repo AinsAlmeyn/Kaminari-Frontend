@@ -17,6 +17,9 @@ export default function Together() {
     //! CURRENT TIME
     const [currentTime, setCurrentTime] = useState(moment());
 
+    //! IS MOBILE
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
     useEffect(() => {
         // Her saniye currentTime'i güncelleyen bir zamanlayıcı başlat
         const intervalId = setInterval(() => {
@@ -41,6 +44,17 @@ export default function Together() {
     const [iframeUrl, setIframeUrl] = useState("");
     const [userInput, setUserInput] = useState("");
     const [isURLValid, setIsURLValid] = useState(true);
+
+    //! IS MOBILE
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
 
     //! TOGETHER ROOMS FETCH
     function GetAllRooms() {
@@ -153,19 +167,33 @@ export default function Together() {
         };
     }, []);
 
+
+
     return (
         <div>
             {showIFramePanel ? (
-                // IFrame Panel
                 <div>
-                    <iframe
+                    {isMobile ? (<iframe
+                        src={iframeUrl}
+                        width="100%"
+                        height={gridHeight - 180}
+                        style={{
+                            border: 'none',
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            width: '100%',
+                            height: '100%'
+                        }}
+                        allowFullScreen={true}
+                    ></iframe>) : (<iframe
                         src={iframeUrl}
                         width="100%"
                         height={gridHeight - 180}
                         style={{ border: 'none' }}
                         allowFullScreen={true}
+                    ></iframe>)}
 
-                    ></iframe>
                     <div style={{ marginTop: '20px' }}>
                         <Row>
                             <Col xs="6">
@@ -216,7 +244,6 @@ export default function Together() {
                     </div>
                 </div>
             ) : (
-                // DataGrid Panel
                 <div>
                     <Row className="justify-content-md-center" style={{ marginTop: '20px' }}>
                         <Col md="auto">
