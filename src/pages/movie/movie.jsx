@@ -476,9 +476,20 @@ export default function Movie() {
                     dataSource={searchedMovieDataSource}
                     keyExpr="id"
                     height={window.innerHeight - 200}
-                    showColumnHeaders={false}
-                    columnHidingEnabled={true}
+                    columnAutoWidth={true}
+                    wordWrapEnabled={true}
+                    hoverStateEnabled={true}
+                    cellHintEnabled={true}
+                    showBorders={true}
                     onRowUpdating={onRowUpdating}
+                    showColumnHeaders={true}
+                    showColumnLines={true}
+                    showRowLines={true}
+                    scrolling={{
+                        mode: "virtual",
+                        showScrollbar: "always",
+                        columnRenderingMode: "standard"
+                    }}
                 >
                     <MasterDetail
                         enabled={true}
