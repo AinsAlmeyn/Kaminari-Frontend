@@ -362,6 +362,7 @@ export default function Profile() {
         series_episodes: e.oldData.series_episodes,
         my_score: e.newData.my_score,
         my_status: e.newData.my_status,
+        my_old_status: e.oldData.my_status,
         userId: userId,
       };
 
@@ -381,6 +382,7 @@ export default function Profile() {
       const postData = {
         series_animedb_id: e.data.series_animedb_id,
         userId: userId,
+        my_status: e.data.my_status
       };
       postRequestSyncPromise("UserAnimeProfile/DeleteUserAnime", postData)
         .then(data => {
