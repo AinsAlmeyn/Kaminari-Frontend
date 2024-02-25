@@ -136,7 +136,6 @@ export default function Home() {
 
     window.addEventListener('resize', handleResize);
     fetchSeasonNowAnimes();
-    // Component unmount olduğunda event listener'ı temizle
     return () => {
       window.removeEventListener('resize', handleResize);
     };
@@ -144,7 +143,6 @@ export default function Home() {
 
 
   useEffect(() => {
-    // Panel açıldığında ve 'yearsAndSeasons' boş olduğunda 'fetchSeasons' fonksiyonunu çağır
     if (!isFilterPanelVisible && yearsAndSeasons.length === 0) {
       fetchSeasons();
     }
@@ -297,6 +295,7 @@ export default function Home() {
         series_episodes: e.oldData.episodes,
         my_score: e.newData.my_score,
         my_status: e.newData.my_status,
+        my_old_status: e.oldData.my_status,
         userId: userId,
       };
       console.log(postData);
@@ -377,74 +376,6 @@ export default function Home() {
       </div>
     );
   };
-
-
-  // const mobileCellRender = (data) => {
-  //   let statusElement = null;
-  //   let scoreElement = null;
-
-  //   if (data.data.my_status) {
-  //     let statusIconClass;
-  //     let statusIconColor;
-  //     switch (data.data.my_status) {
-  //       case 'Completed':
-  //         statusIconClass = 'fa fa-check-circle';
-  //         statusIconColor = 'green';
-  //         break;
-  //       case 'Watching':
-  //         statusIconClass = 'fa fa-eye';
-  //         statusIconColor = 'blue';
-  //         break;
-  //       case 'Plan to Watch':
-  //         statusIconClass = 'fa fa-clock';
-  //         statusIconColor = 'orange';
-  //         break;
-  //       case 'Dropped':
-  //         statusIconClass = 'fa fa-times-circle';
-  //         statusIconColor = 'red';
-  //         break;
-  //       case 'On-Hold':
-  //         statusIconClass = 'fa fa-pause-circle';
-  //         statusIconColor = 'purple';
-  //         break;
-  //       default:
-  //         statusIconClass = 'fa fa-question-circle';
-  //         statusIconColor = 'grey';
-  //     }
-  //     statusElement = (
-  //       <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-  //         <i className={statusIconClass} style={{ color: statusIconColor }}></i>
-  //         <span>{data.data.my_status}</span>
-  //       </div>
-  //     );
-  //   }
-
-  //   if (data.data.my_score || data.data.my_score === 0) {
-  //     scoreElement = <span style={{ marginLeft: 'auto' }}>{data.data.my_score}</span>;
-  //   }
-
-  //   return (
-  //     <div style={{ display: 'flex', alignItems: 'center', padding: '10px', gap: '10px' }}>
-  //       <img 
-  //         src={data.data.images.jpg.large_image_url} 
-  //         alt="Anime" 
-  //         style={{ width: '80px', height: '110px', objectFit: 'cover' }} 
-  //       />
-  //       <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', flex: 1 }}>
-  //         <strong>{data.data.title}</strong>
-  //         <span>Type: {data.data.type}</span>
-  //         <span>Episodes: {data.data.episodes}</span>
-  //         <span>Score: {data.data.score}</span>
-  //         <span>Members: {data.data.members}</span>
-  //         {statusElement && <div style={{ display: 'flex', marginTop: 'auto', gap: '5px' }}>
-  //           {statusElement}
-  //           {scoreElement}
-  //         </div>}
-  //       </div>
-  //     </div>
-  //   );
-  // };
-
 
   const mobileDataGrid = () => {
     return (<DataGrid
@@ -874,6 +805,10 @@ export default function Home() {
 
   return (
     <div>
+      <Row>
+        <iframe src="https://www.animeland.us/naruto-shippuden-episode-500-english-subbed" width="800" height="800">
+        </iframe>
+      </Row>
       {isFilterPanelVisible && (
         <>
           {
@@ -902,7 +837,7 @@ export default function Home() {
                 labelMode='floating'
                 label='Select Season...'
                 showClearButton={true}
-                disabled={!selectedYear} // Yıl seçilmediyse sezon seçilemez
+                disabled={!selectedYear}
               />
             </Col>
           </Row>
@@ -914,7 +849,7 @@ export default function Home() {
                 color: 'white',
               }} width={"100%"} height={"100%"}
                 onClick={handleSearchBySeason}
-                disabled={!selectedYear || !selectedSeason} // Yıl ve sezon seçilmediyse buton etkisizdir
+                disabled={!selectedYear || !selectedSeason}
               />
             </Col>
             <Col xs="6">
