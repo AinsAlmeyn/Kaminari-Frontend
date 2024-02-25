@@ -805,10 +805,6 @@ export default function Home() {
 
   return (
     <div>
-      <Row>
-        <iframe src="https://www.animeland.us/naruto-shippuden-episode-500-english-subbed" width="800" height="800">
-        </iframe>
-      </Row>
       {isFilterPanelVisible && (
         <>
           {
