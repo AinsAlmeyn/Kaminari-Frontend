@@ -13,5 +13,10 @@ export const navigation = [
     text: 'Together',
     path: '/together',
     icon: 'fa-solid fa-people-group'
+  },
+  {
+    text: 'Discord',
+    path: '/discord',
+    icon: 'fa-brands fa-discord'
   }
 ];

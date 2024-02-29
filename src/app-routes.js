@@ -1,4 +1,4 @@
-import { HomePage, ProfilePage, TogetherPage, MoviePage} from './pages';
+import { HomePage, ProfilePage, TogetherPage, MoviePage, DiscordPage} from './pages';
 import { withNavigationWatcher } from './contexts/navigation';
 
 const routes = [
@@ -17,6 +17,10 @@ const routes = [
     {
         path: '/movie',
         element: MoviePage
+    },
+    {
+        path: '/discord',
+        element: DiscordPage
     }
 ];
 
