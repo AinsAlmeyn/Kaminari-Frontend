@@ -13,16 +13,16 @@ export default function Discord() {
         <div>
             <iframe
                 src={"https://discord.com/widget?id=683389156608573503&theme=dark"}
-                width="70%"
-                height={"70%"}
+                width="100%"
+                height={"100%"}
                 style={{
                     border: 'none',
                     position: 'absolute',
                     top: 0,
                     left: 0,
-                    width: '100%',
-                    height: '100%'
                 }}
+                sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
+                allowTransparency={true}
                 allowFullScreen={true}
             ></iframe>
         </div>

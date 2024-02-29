@@ -1,12 +1,17 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo, useCallback, useState } from 'react';
+import { Row, Col } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import ContextMenu, { Position } from 'devextreme-react/context-menu';
+import { Button, TextBox, Popup } from 'devextreme-react';
 import List from 'devextreme-react/list';
 import { useAuth } from '../../contexts/auth';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import '@fortawesome/fontawesome-free/js/all.js';
 import './UserPanel.scss';
 
 
 export default function UserPanel({ menuMode }) {
+  const [ isDiscordPopupVisible, setDiscordPopupVisible ] = useState();
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
 
@@ -23,6 +28,11 @@ export default function UserPanel({ menuMode }) {
       text: 'Logout',
       icon: 'runner',
       onClick: signOut
+    },
+    {
+      text: 'Discord',
+      icon: 'fa-brands fa-discord',
+      onClick: () => setDiscordPopupVisible(true)
     }
   ]), [navigateToProfile, signOut]);
   return (
@@ -38,6 +48,37 @@ export default function UserPanel({ menuMode }) {
         </div>
         <div className={'user-name'}>{user.email}</div>
       </div>
+      <Row>
+        <Popup
+          visible={isDiscordPopupVisible}
+          onHiding={() => setDiscordPopupVisible(false)}
+          hideOnOutsideClick={true}
+          showTitle={true}
+          title='Discord Information'
+          width={"50%"}
+          height={"50%"}
+          contentRender={() => {
+            return (
+              <div>
+                <iframe
+                  src={"https://discord.com/widget?id=683389156608573503&theme=dark"}
+                  width="100%"
+                  height={"100%"}
+                  style={{
+                    border: 'none',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                  }}
+                  sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
+                  allowTransparency={true}
+                  allowFullScreen={true}
+                ></iframe>
+              </div>
+            )
+          }}
+        />
+      </Row>
 
       {menuMode === 'context' && (
         <ContextMenu
