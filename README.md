@@ -93,6 +93,8 @@ In the development of the Kaminari Project, I utilized a variety of technologies
 - **[C#](https://docs.microsoft.com/en-us/dotnet/csharp/)**: The primary programming language for developing the backend logic and APIs in my .NET Core projects.
 - **[vidsrc.to](https://vidsrc.to/)**: A video streaming API that was crucial for aggregating and streaming video content directly within the application.
 - **[vidsrc.xyz](https://vidsrc.xyz/)**: Provided an additional layer of video content accessibility, ensuring a wide variety of streaming options for users.
+- **[Discord API](https://discord.com/developers/docs/intro)**: Enables users to chat, voice/video communicate, and create communities, enhancing the Social Page of the application.
+- **[Youtube API](https://developers.google.com/youtube/v3?hl=tr)**: Provides access to video content, enriching the Video Page of the application with a wealth of video content.
 
 ## Acknowledgements
 
@@ -107,6 +109,8 @@ I would like to express my sincere gratitude to the developers and communities b
 - The MongoDB team for their efficient and scalable database solution.
 - The .NET Core and C# communities for their robust framework and programming language that have powered my server-side development.
 - The teams behind vidsrc.to and vidsrc.xyz for their pivotal role in enhancing video content accessibility within the project.
+- The YouTube API team for providing access to a vast array of video content, enabling rich video experiences on the Video Page of my project.
+- The Discord API team for offering powerful tools for community building and real-time communication, enriching the Social Page of the application.
 
 Your contributions have not only made my project possible but have also inspired me to push the boundaries of what I can create. Thank you.
 
