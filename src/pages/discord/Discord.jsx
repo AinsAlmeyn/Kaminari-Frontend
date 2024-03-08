@@ -12,7 +12,7 @@ export default function Discord() {
     return (
         <div>
             <iframe
-                src={"https://discord.com/widget?id=683389156608573503&theme=dark"}
+                src={"https://discord.com/widget?id=YOUR ID&theme=dark"}
                 width="100%"
                 height={"100%"}
                 style={{
