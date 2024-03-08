@@ -82,6 +82,8 @@ The Profile Page serves as the nerve center for users, enabling them to:
 
 In the development of the Kaminari Project, I utilized a variety of technologies and services to create a comprehensive and user-friendly platform. My goal was to integrate the best tools available to provide a seamless experience for users. Here are some of the key technologies I used in the Kaminari Project:
 
+- **[Youtube API](https://developers.google.com/youtube/v3?hl=tr)**: Provides access to video content, enriching the Video Page of the application with a wealth of video content.
+- **[Discord API](https://discord.com/developers/docs/intro)**: Enables users to chat, voice/video communicate, and create communities, enhancing the Social Page of the application.
 - **[MyAnimeList API](https://myanimelist.net/apiconfig/references/api/v2)**: Used for accessing detailed anime information, helping me enrich the Anime Page with extensive data.
 - **[Jikan API](https://jikan.moe/)**: A RESTful API that provides additional anime data by interfacing with MyAnimeList, enhancing the content's richness.
 - **[TMDB API](https://www.themoviedb.org/documentation/api)**: Offers access to a vast database of movie and TV show information for the Movie Page.
@@ -93,8 +95,6 @@ In the development of the Kaminari Project, I utilized a variety of technologies
 - **[C#](https://docs.microsoft.com/en-us/dotnet/csharp/)**: The primary programming language for developing the backend logic and APIs in my .NET Core projects.
 - **[vidsrc.to](https://vidsrc.to/)**: A video streaming API that was crucial for aggregating and streaming video content directly within the application.
 - **[vidsrc.xyz](https://vidsrc.xyz/)**: Provided an additional layer of video content accessibility, ensuring a wide variety of streaming options for users.
-- **[Discord API](https://discord.com/developers/docs/intro)**: Enables users to chat, voice/video communicate, and create communities, enhancing the Social Page of the application.
-- **[Youtube API](https://developers.google.com/youtube/v3?hl=tr)**: Provides access to video content, enriching the Video Page of the application with a wealth of video content.
 
 ## Acknowledgements
 
